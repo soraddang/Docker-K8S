@@ -16,9 +16,24 @@
    
    3) Ubuntu 저장소 설정
       cd /etc/apt
-      mv source.list sources.list.bak
-      wget http://dw.hanbit.co.kr/ubuntu/20.04/sources.list
+      mv sources.list sources.list.bak
+      nano sources.list
+         deb http://ftp.daumkakao.com/ubuntu/ focal main
+         deb http://archive.ubuntu.com/ubuntu/ focal main
 
+         deb http://ftp.daumkakao.com/ubuntu/ focal universe
+         deb http://archive.ubuntu.com/ubuntu/ focal universe
+
+         deb http://ftp.daumkakao.com/ubuntu/ focal multiverse
+         deb http://archive.ubuntu.com/ubuntu/ focal multiverse
+
+         deb http://ftp.daumkakao.com/ubuntu/ focal restricted
+         deb http://archive.ubuntu.com/ubuntu/ focal restricted
+      
+      또는 sources.list 다운로드 
+      
+          wget http://dw.hanbit.co.kr/ubuntu/20.04/sources.list
+      
    4) Package Update
       apt update
       
