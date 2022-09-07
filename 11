@@ -1,3 +1,46 @@
+1. Ubuntu 환경 설정 
+   
+   1) 소프트웨어 업데이트 비활성화 
+   2) Root 로그인 허용
+    nano /etc/gdm3/custom.conf
+      AutomaticLoginEable=true
+      AutomaticLogin = root
+      AllowRoot=true
+
+    nano /etc/pam.d/gdm-password
+      #auth required pam_succeed_if.so 
+
+    nano /etc/pam.d/gdm-autologin
+      #auth required pam_succeed_if.so user !=root quiet_success
+   
+   3) Ubuntu 저장소 설정
+      cd /etc/apt
+      mv source.list sources.list.bak
+      wget http://dw.hanbit.co.kr/ubuntu/20.04/sources.list
+
+   4) Package Update
+      apt update
+      
+   5) 네트워크 툴 설치 
+      apt install net-tools
+      
+   6) [Master] SSH 설치
+      apt install openssh-server
+      systemctl status ssh
+      systemctl enable ssh
+      systemctl start ssh
+      
+      *ssh client
+       apt-get install openssh-client(기본적으로 설치되어 있음)
+       
+      * ssh username@ip_address
+      
+   7) 방화벽 설치
+      apt install firewalld
+      systemctl stop firewalld
+      systemctl disable firewall
+      
+
 [참조사이트] https://docs.docker.com
 
 1. Docker Engine 설치
