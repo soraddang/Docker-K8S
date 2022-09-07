@@ -117,6 +117,8 @@
         disabled_plugins 항목에서 CRI 제거한 뒤
      systemctl restart containerd
      kubeadm init
+     
+     **kubeadmin join~~을 파일로 저장 
     ----------------------------------------
  
   mkdir -p $HOME/.kube
