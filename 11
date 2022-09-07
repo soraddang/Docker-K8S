@@ -144,6 +144,10 @@
         disabled_plugins 항목에서 CRI 제거한 뒤
      systemctl restart containerd
     ----------------------------------------
+    
+    <<master접속 후 kubeadmin join 복사>>
+     openssh master@192.168.10.200
+    
    
    
 7. [Master]클러스터 노드 확인  
