@@ -42,6 +42,9 @@
    sysctl --system
 
 3. K8S 설치 
+
+1) [All nodes] Kubeadm, kubect, kubelet Install
+
 apt-get update
 apt-get install -y apt-transport-https ca-certificates curl
 curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg 
@@ -49,6 +52,42 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 apt-get update
 apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
+
+
+systemctl daemon-reload
+systemctl restart kubelet
+systemctl enable kubelet
+reboot
+
+
+2) [Master]  Kubeadmn을 이용한 cluster 구성
+kubeadm init
+
+kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
+export KUBECONFIG=/etc/kubernetes/admin.conf
+kubectl get nodes
+
+
+3)  [Worker Node] Master node와 Worker node join 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
