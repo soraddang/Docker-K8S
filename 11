@@ -68,6 +68,13 @@ reboot
 2) [Master]  Kubeadmn을 이용한 cluster 구성
 kubeadm init
 
+ <<ERROR CRI :: container runtime is not running 오류발생시>>
+ nano /etc/containerd/config.toml
+ disabled_plugins 항목에서 CRI 제거한 뒤
+ systemctl restart containerd
+ kubeadm nin
+   
+
 kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl get nodes
