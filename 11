@@ -1,7 +1,7 @@
 1. Ubuntu 환경 설정 
    
-   1) 소프트웨어 업데이트 비활성화 
-   2) Root 로그인 허용
+  1) 소프트웨어 업데이트 비활성화 
+  2) Root 로그인 허용
     nano /etc/gdm3/custom.conf
       AutomaticLoginEable=true
       AutomaticLogin = root
