@@ -1,0 +1,167 @@
+1. Ubuntu 환경 설정 
+   
+  1) 소프트웨어 업데이트 비활성화 
+ 
+  2) Root 로그인 허용
+     nano /etc/gdm3/custom.conf
+      AutomaticLoginEable=true
+      AutomaticLogin = root
+      AllowRoot=true
+
+     nano /etc/pam.d/gdm-password
+      #auth required pam_succeed_if.so 
+
+     nano /etc/pam.d/gdm-autologin
+      #auth required pam_succeed_if.so user !=root quiet_success
+   
+   3) Ubuntu 저장소 설정
+      cd /etc/apt
+      mv source.list sources.list.bak
+      wget http://dw.hanbit.co.kr/ubuntu/20.04/sources.list
+
+   4) Package Update
+      apt update
+      
+   5) 네트워크 툴 설치 
+      apt install net-tools
+      
+   6) [Master] SSH 설치
+      apt install openssh-server
+      systemctl status ssh
+      systemctl enable ssh
+      systemctl start ssh
+      
+      *ssh client
+       apt-get install openssh-client(기본적으로 설치되어 있음)
+       
+      * ssh username@ip_address
+      
+   7) 방화벽 설치
+      apt install firewalld
+      systemctl stop firewalld
+      systemctl disable firewall
+      
+
+
+2. [All Node] Docker Engine 설치 
+
+   [참조사이트] https://docs.docker.com
+
+ 1) Docker에 필요한 툴 설치
+  apt-get update
+  apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
+  
+ 2) 도커 GPG key와 저장소 지정   
+  mkdir -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+3) 패키지 업데이트 
+  apt update
+
+4) Docker Engine 설치 
+  apt install docker-ce docker-ce-cli containerd.io
+
+<<Docker Engine 설치 시 의존성문제가 발생시 추가 패키지 설치 후 Docker Engine 설치>>
+ curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+ dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+ apt install docker-ce docker-ce-cli containerd.io
+
+5) Docker 활성화 
+  systemctl enable docker
+  systemctl start docker
+  docker version
+
+
+3. K8S 설치 전 준비사항(All Node)
+
+   [참조사이트] https://kubernetes.io/docs/home
+
+1) Swap 비활성화
+   swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
+   
+2)  Master와 Workernode 브릿지(스위치) 연결
+   cat<<EOF | tee /etc/sysctl.d/k8s.conf
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.bridge.bridge-nf-call-iptables = 1
+      EOF
+   sysctl --system
+
+
+4.[All nodes] Kubeadm, kubect, kubelet Install
+
+1) K8S GPG key와 저장소 지정 
+  apt-get update
+  apt-get install -y apt-transport-https ca-certificates curl
+  curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg 
+  echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+2) K8S 저장소의 패키지 업데이트와 K8S 설치  
+  apt-get update
+  apt-get install -y kubelet kubeadm kubectl
+  apt-mark hold kubelet kubeadm kubectl
+
+3) json 을 이용한 cgroupdriver 지정 >>
+   nano /etc/docker/daemon.json
+   {
+     "exec-opts": ["native.cgroupdriver=systemd"]
+    }
+
+ 4) K8S 서비스 활성화>>
+   systemctl daemon-reload
+   systemctl restart kubelet
+   systemctl enable kubelet
+
+
+5. [Master]  Kubeadmn을 이용한 cluster 구성
+
+ 1)  마스터 노드 초기화
+ 
+   kubeadm init   또는      <<kubeadm init --apiserver-advertise-address=192.168.10.200>>
+
+    ------------------------------------------------------------
+    <<ERROR CRI :: container runtime is not running 오류발생시>>
+    ------------------------------------------------------------
+     nano /etc/containerd/config.toml
+        disabled_plugins 항목에서 CRI 제거한 뒤
+     systemctl restart containerd
+     kubeadm init
+     
+     **kubeadmin join~~을 파일로 저장 
+     nano /kube.txt
+         kubeadmin join~~  
+     
+    ----------------------------------------
+ 
+  2) CNI 구성
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+  
+    kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')
+    export KUBECONFIG=/etc/kubernetes/admin.conf
+    kubectl get nodes
+  
+   3) 방화벽 활성화 (6443포트 활성화) 
+     firewall-cmd --add-port=6443/tcp --permanent
+     firewall-cmd --reload
+     firewall-cmd --list-all
+
+
+6. [Worker Node] Master node와 Worker node join (Cluster 구성) 
+   
+      
+    -------------------------------------------------------------
+    <<ERROR CRI :: container runtime is not running 오류발생시>>
+    -------------------------------------------------------------
+     nano /etc/containerd/config.toml
+        disabled_plugins 항목에서 CRI 제거한 뒤
+     systemctl restart containerd
+    ----------------------------------------
+    
+    * master접속 후 kubeadmin join 복사
+       ssh master@192.168.10.200    
+   
+   
+7. [Master]클러스터 노드 확인  
+  kubectl get nodes
