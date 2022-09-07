@@ -159,6 +159,7 @@
   
    3) 방화벽 활성화 (6443포트 활성화) 
      firewall-cmd --add-port=6443/tcp --permanent
+     firewall-cmd --add-port=22/tcp --permanent
      firewall-cmd --reload
      firewall-cmd --list-all
 
