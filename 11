@@ -72,7 +72,11 @@ kubeadm init
  nano /etc/containerd/config.toml
  disabled_plugins 항목에서 CRI 제거한 뒤
  systemctl restart containerd
- kubeadm nin
+ kubeadm init
+ 
+iptables -t raw -A OUTPUT -p tcp --dport 6443 -j TRACE
+iptables -t raw -A PREROUTING -p tcp --dport 6443 -j TRACE
+tail -f /var/log/kern.log
    
 
 mkdir -p $HOME/.kube
