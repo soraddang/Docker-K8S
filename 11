@@ -1,3 +1,5 @@
+[참조사이트] https://docs.docker.com
+
 1. Docker Engine 설치
 
 1) Docker에 필요한 툴 설치
@@ -24,6 +26,8 @@
  systemctl enable docker
  systemctl start docker
  docker version
+
+[참조사이트] https://kubernetes.io/docs/home
 
 2. K8S 설치 전 준비사항
 
