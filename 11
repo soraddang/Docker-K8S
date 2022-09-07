@@ -137,6 +137,14 @@
 
 6. [Worker Node] Master node와 Worker node join 
    
+       <<ERROR CRI :: container runtime is not running 오류발생시>>
+    -----------------------------------------
+     nano /etc/containerd/config.toml
+        disabled_plugins 항목에서 CRI 제거한 뒤
+     systemctl restart containerd
+    ----------------------------------------
+   
+   
 7. [Master]클러스터 노드 확인  
   kubectl get nodes
 
