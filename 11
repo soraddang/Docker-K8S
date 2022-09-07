@@ -68,16 +68,19 @@ reboot
 2) [Master]  Kubeadmn을 이용한 cluster 구성
 kubeadm init
 
+  << kubeadm init --apiserver-advertise-address=192.168.10.200>>
+
  <<ERROR CRI :: container runtime is not running 오류발생시>>
  nano /etc/containerd/config.toml
  disabled_plugins 항목에서 CRI 제거한 뒤
  systemctl restart containerd
  kubeadm init
  
-iptables -t raw -A OUTPUT -p tcp --dport 6443 -j TRACE
-iptables -t raw -A PREROUTING -p tcp --dport 6443 -j TRACE
-tail -f /var/log/kern.log
-   
+
+<<방화벽 활성화>>
+firewall-cmd --add-port=6443/tcp --permanent
+firewall-cmd --reload
+firewall-cmd --list-all
 
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
