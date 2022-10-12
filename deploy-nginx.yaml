@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webui
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: webui
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.14
+
+
+-----------------------
+kubectl create -f deploy-nginx.yaml
+kubectl get pods -o wide
+
+kubectl get deployments
+kubectl get replicasets
+kubectl get pos
+
+kubectl delete deployment deploy-nginx
+
