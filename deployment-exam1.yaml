@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: webui
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: webui
+    spec:
+      containers:
+      - image: nginx:1.14
+        name: web
+        ports:
+        - containerPort: 80
+
+----------------------------------------
+kubectl create -f deployment-exam1.yaml --record
+kubectl get deployment,rs,pod,svc
+
+<<application rolling update>>
+kubectl set image deploy app-deploy web=nginx:1.15 --record
+kubectl set image deploy app-deploy web=nginx:1.16 --record
+kubectl set image deploy app-deploy web=nginx:1.17 --record
+
+<<controlling rolling update>>
+kubectl rollout pause deploy app-deploy
+kubectl rollout resume deploy app-deploy
+kubectl rollout status deploy app-deploy
+
+<<application rollback>>
+kubectl rollout history deployment app-deploy
+kubectl rollout undo deployment app-deploy
+
+
