@@ -39,10 +39,21 @@ kubectl scale rc rc-nginx --replicas=2
 kubectl get pods -o wide
 
 <<rolling-update>>
+서비스 진행 중에 버전 업데이트 
 kubectl edit rc rc-nginx
+  ==>  spec:
+       containers:
+      - name: nginx-container
+        image: nginx:1.14
+ 
+ 
+  ==>  spec:
+       containers:
+      - name: nginx-container
+        image: nginx:1.15
+ 
+ 
 kubectl describe pods rc-nginx-XXXX
 kubectl delete pod rc-nginx-XXXX
 kubectl get pods -o wide
-kubectl describe pods rc-nginx-XXXX
-
-
+kubectl describe pods rc-nginx-XXXX 
