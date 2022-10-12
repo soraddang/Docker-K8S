@@ -18,7 +18,10 @@ spec:
 
 
 ==================================
-<<Controller와 Pod 생성>>
+<<Controller와 Pod 생성>
+
+watch kubectl get pods -o wide
+
 kubectl create -f rc-nginx.yaml
 kubectl get replicationcontrollers
 kubectl get rc
@@ -27,7 +30,8 @@ kubectl get pods
 kubectl delete pod rc-nginx-xxxx
 
 <<scale-out>>
-kubectl edit rc rc-nginx  
+kubectl edit rc rc-nginx
+  3 ==> 4  (vi 3)
 kubectl get pods -o wide
 
 <<scale-down>>
