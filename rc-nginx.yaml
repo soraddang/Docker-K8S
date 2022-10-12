@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rc-nginx
+spec:
+  replicas: 3
+  selector:
+    app: webui
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: webui
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.14
+
+
+==================================
+<<Controller와 Pod 생성>>
+kubectl create -f rc-nginx.yaml
+kubectl get replicationcontrollers
+kubectl get rc
+kubectl describe rc rc-nginx
+kubectl get pods
+kubectl delete pod rc-nginx-xxxx
+
+<<scale-out>>
+kubectl edit rc rc-nginx  
+kubectl get pods -o wide
+
+<<scale-down>>
+kubectl scale rc rc-nginx --replicas=2
+kubectl get pods -o wide
+
+<<rolling-update>>
+kubectl edit rc rc-nginx
+kubectl describe pods rc-nginx-XXXX
+kubectl delete pod rc-nginx-XXXX
+kubectl get pods -o wide
+kubectl describe pods rc-nginx-XXXX
+
+
