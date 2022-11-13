@@ -14,3 +14,7 @@ spec:
         backend:
           serviceName: pay-service
           servicePort: 80
+          
+          
+          
+          
