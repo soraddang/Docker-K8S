@@ -107,7 +107,7 @@ kind: Pod
 metadata:
   name: pod-annotation
   annotations:
-    builder: "Gildong.hong"
+    builder: "Gildong"
     buildDate: "20221101"
     imageRegistry: https://hub.docker.com/
 spec:
