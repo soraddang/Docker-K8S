@@ -1,0 +1,121 @@
+<<pod1.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+
+<<pod2.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: label-pod-demo
+  labels:
+    name: mainui
+    rel: stable
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+
+
+<<nodeselector>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-nodeselector
+spec:
+  nodeSelector:
+    gpu: "true"
+    disk: ssd
+  containers:
+  - name: nginx
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+    
+<<mainui-stable.yaml>>    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mainui-stable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mainui
+      version: stable
+  template:
+    metadata:
+      labels:
+        app: mainui
+        version: stable
+    spec:
+      containers:
+      - name: mainui
+        image: nginx:1.14
+        ports:
+        - containerPort: 80
+
+
+<<mainui-service.yaml>> 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mainui-svc
+spec:
+  selector:
+    app: mainui
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+
+<<mainui-canary.yaml>> 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mainui-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mainui
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: mainui
+        version: canary
+    spec:
+      containers:
+      - name: mainui
+        image: nginx:1.15
+        ports:
+        - containerPort: 80
+        
+<<annotation.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-annotation
+  annotations:
+    builder: "seongmi Lee (seongmi.lee@gmail.com)"
+    buildDate: "20210502"
+    imageRegistry: https://hub.docker.com/
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+
+        
+
