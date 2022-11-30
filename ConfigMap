@@ -1,0 +1,20 @@
+apiVersion: v1
+  kind: Pod
+  metadata:
+    name: container-env-example
+  spec:
+    containers:
+      - name: my-container
+        image: busybox
+        args: ['tail', '-f', '/dev/null']
+        env:
+        - name: ENV_KEYNAME_1            
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL              
+              name: log-level-configmap
+        - name: ENV_KEYNAME_2
+          valueFrom:
+            configMapKeyRef:
+              key: k8s
+              name: start-k8s
