@@ -1,40 +1,78 @@
+<<all-env-from-configmap.yaml>>
 apiVersion: v1
-  kind: Pod
-  metadata:
-    name: container-env-example
-  spec:
-    containers:
-      - name: my-container
-        image: busybox
-        args: ['tail', '-f', '/dev/null']
-        env:
-        - name: ENV_KEYNAME_1            
-          valueFrom:
-            configMapKeyRef:
-              key: LOG_LEVEL              
-              name: log-level-configmap
-        - name: ENV_KEYNAME_2
-          valueFrom:
-            configMapKeyRef:
-              key: k8s
-              name: start-k8s
+kind: Pod
+metadata:
+  name: container-env-example-all
+spec:
+  containers:
+    - name: my-container
+      image: busybox
+      args: ['tail', '-f', '/dev/null']
+      envFrom:
+      - configMapKeyRef:
+         name:log-level-configmap
+      - configMapRef
+         name: start-k8s
+
+<<selective-env-from-configmap.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: container-env-example-select
+spec:
+  containers:
+    - name: my-container
+      image: busybox
+      args: ['tail', '-f', '/dev/null']
+      env:
+      - name: ENV_KEYNAME_1            
+        valueFrom:
+          configMapKeyRef:
+            key: LOG_LEVEL              
+            name: log-level-configmap
+      - name: ENV_KEYNAME_2
+        valueFrom:
+          configMapKeyRef:
+            key: k8s
+            name: start-k8s
             
- <<volume-mount-configmap.yaml>>
- apiVersion: v1
- kind: Pod
- metadata:
-   name: configmap-volume-pod
- spec:
-   containers:
-     - name: my-container
-       image: busybox
-       args: ["tail", "-f", "/dev/null"]
-       volumeMounts:
-         - name: configmap-volume
-           mountPath: /etc/config
-    volumes:
-     - name: configmap-volume
-       configMap:
-          name: start-k8s
+<<volume-mount-configmap.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-volume-pod
+spec:
+  containers:
+    - name: my-container
+      image: busybox
+      args: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - name: configmap-volume
+          mountPath: /etc/config
+  volumes:
+    - name: configmap-volume
+      configMap:
+        name: start-k8s
+        
+<<selective-volume-configmap.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-volume-pod
+spec:
+  containers:
+    - name: my-container
+      image: busybox
+      args: ["tail", "-f", "/dev/null"]
+      volumeMounts:
+        - name: configmap-volume
+          mountPath: /etc/config
+  volumes:
+    - name: configmap-volume
+      configMap:
+        name: start-k8s
+        items:
+        - key: k8s
+          path: k8s-fullname
           
           
