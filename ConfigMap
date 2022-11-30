@@ -58,7 +58,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: configmap-volume-pod
+  name: configmap-volume-pod-re
 spec:
   containers:
     - name: my-container
