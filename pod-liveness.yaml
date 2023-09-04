@@ -1,0 +1,54 @@
+<< live1.yaml>>
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: live-pod
+spec:
+  containers:
+  - name: nginx-conatiner
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+
+------------------------
+
+delay=0 pod가 running 되면 곧바로 health check 함
+                   initialDelaySeconds : 15
+timeout=1s : get 요청을 하고 1초가 지나도 응답이 없으면 실패로 판단
+                   timeoutSeconds: 1
+period=10s health check 시간 주기 (10초마다 get요청을 전송)
+                   periodSeconds: 20 
+success=1   1번 200코드가 오면 성공으로 보겠음 
+             successThreshold: 1
+failure=3     연속해서 3번 실패하면 실패하겠음
+            failureThreshod: 3
+------------------------------
+kubectl get pod live-pod -o yaml 
+
+
+지정된 IP 주소, port, path에 HTT GET 요청을 보내 해당 컨테이너가 
+응답하는지 확인(변환코드가 200이 나니 값이 나오면 오류, 컨테이너를 다시 시작)  
+
+livenessProbe:
+      httpGet:
+        path: /
+        port: 8080
+
+지정된 포트에 tcp 연결을 시도, 연결되지 않으면 컨테이너를 다시 시작 
+23번으로 접속이 가능하면 
+ livenessProbe:
+      tcpSocket:
+          port: 23
+
+exec 명령을 전달하고 명령의 종료코드가 0이 아니면 컨테이너를 다시 시작 
+ livenessProbe:
+     exec:
+          command:
+          - ls 
+          - /data/file 
