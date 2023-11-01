@@ -32,7 +32,7 @@ kubectl delete pod rc-nginx-xxxx
 
 <<scale-out>>
 kubectl edit rc rc-nginx
-  3 ==> 4  (vi 3)
+  3 ==> 4  (vi 3)   //교체할 문자에 R(REPLACE) 후
 kubectl get pods -o wide
 
 <<scale-down>>
