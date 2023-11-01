@@ -1,6 +1,0 @@
-Sliding window : 송신자가 수신자의 buffer overflow가 발생되지 않도록 전송량을 제어하는 매카니즘 
-Window full : Wireshark의 분석 정보의 하나로 송신자가 수신자 ACK 없이 보낼 수 있는 데이타를 모두 보냈음을 의미 
-Congestion window : 네트워크 congestion 발생 시 network 부하를 감소시키기 위해서 사용하는 송신자의 window 
-Window based flow control : 수신자의 buffer overflow가 발생되지 않도록 송신지의 전송량을 제어하는 매카니즘 
-Window based congestion control : 송신자와 수신자 사이의 네트워크에서 congestion을 회피하기 위해 사용하는 매커니즘 
-buffer overflow : buffer저장공간이 꽉차서 새로 도착하는 데이타가 버려지는 것
