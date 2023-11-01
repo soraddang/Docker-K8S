@@ -27,6 +27,7 @@ kubectl get replicationcontrollers
 kubectl get rc
 kubectl describe rc rc-nginx
 kubectl get pods
+kubectl get pods --show-labes
 kubectl delete pod rc-nginx-xxxx
 
 <<scale-out>>
