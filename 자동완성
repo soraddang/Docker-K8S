@@ -1,0 +1,4 @@
+source <(kubectl completion bash) 
+source <(kubeadm completion bash)
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+echo 'source <(kubeadm completion bash)' >>~/.bashrc
