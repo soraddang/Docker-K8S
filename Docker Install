@@ -22,5 +22,5 @@ apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin do
 3단계. Verify the Docker Engine installation
 
 docker version
-docker run hello-world
+
 
