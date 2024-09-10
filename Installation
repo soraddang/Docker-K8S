@@ -20,16 +20,7 @@
             
    4) Package Update
       apt update
-      
-   5) 네트워크 툴 설치 
-      apt install net-tools
-      
-   6) SSH 설치
-      apt install openssh-server
-      systemctl status ssh
-      systemctl enable ssh
-      systemctl start ssh
-      
+     
 2. [All Node] Docker Engine 설치 
 
    [참조사이트] https://docs.docker.com
