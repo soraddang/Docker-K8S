@@ -149,3 +149,16 @@ kubectl get pods -A -o wide     #CNI 적용 확인
 kubectl get node
 또는
 kubectl get nodes -o wide
+
+----------------------------------
+# 기존 설정 파일 백업
+mv /etc/containerd/config.toml /etc/containerd/config.toml.back
+
+# 새로운 설정 파일 생성
+cat <<EOF > /etc/containerd/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+SystemdCgroup = true
+EOF
+
+# 서비스 재시작 및
