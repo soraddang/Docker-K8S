@@ -31,7 +31,7 @@
        rm /var/lib/apt/lists/lock
        rm /var/cache/apt/archives/lock
        rm /var/lib/dpkg/lock*
-       dpkg --configure 
+       dpkg --configure  -a
        apt-get update
 
  2) 도커 GPG key와 저장소 지정   
