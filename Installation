@@ -40,9 +40,22 @@
 4) Docker Engine 설치 
  curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
  dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
- apt install docker-ce docker-ce-cli containerd.io
+ apt install docker-ce docker-ce-cli containerd.io -y
 
-5) Docker 활성화 
+5)  도커 데몬 설정
+    mkdir /etc/docker                                               #/etc/docker 디렉토리 없을 경우 생성
+    cat <<EOF |  tee /etc/docker/daemon.json                         #daemon.json 파일 추가
+     {
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+             "max-size": "100m"
+         },
+        "storage-driver": "overlay2"
+      }
+    EOF
+
+6) Docker 활성화 
   systemctl enable docker
   systemctl start docker
   docker version
