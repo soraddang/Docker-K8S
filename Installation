@@ -1,8 +1,5 @@
 1. Ubuntu 환경 설정 
-   
-  1) 소프트웨어 업데이트 비활성화 
- 
-  2) Ubuntu 저장소 설정
+  1) Ubuntu 저장소 설정
       cd /etc/apt
       mv sources.list sources.list.bak
       nano sources.list
@@ -18,7 +15,7 @@
       deb http://ftp.daumkakao.com/ubuntu/ focal restricted
       deb http://archive.ubuntu.com/ubuntu/ focal restricted
             
-   4) Package Update
+   2) Package Update
       apt update
      
 2. [All Node] Docker Engine 설치 
