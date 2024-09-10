@@ -25,7 +25,15 @@
  1) Docker에 필요한 툴 설치
   apt-get update
   apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
-  
+
+    * 오류메세지 출력시 ==> dpkg frontend lock (/var/lib/dpkg/lock-frontend)
+       killall apt apt-get
+       rm /var/lib/apt/lists/lock
+       rm /var/cache/apt/archives/lock
+       rm /var/lib/dpkg/lock*
+       dpkg --configure 
+       apt-get update
+
  2) 도커 GPG key와 저장소 지정   
   mkdir -p /etc/apt/keyrings
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
