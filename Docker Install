@@ -1,3 +1,4 @@
+https://releases.ubuntu.com/jammy/              ==> 	ubuntu-22.04.5-desktop-amd64.iso
 https://docs.docker.com/engine/install/ubuntu/
 
 1단계. Set up Docker's apt repository(도커 저장소 등록)
