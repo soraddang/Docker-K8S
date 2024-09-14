@@ -27,7 +27,7 @@
    apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
 
    ****오류 발생 시 *****    
-   [오류메시지]  
+   [오류메시지] 
        dpkg frontend lock (/var/lib/dpkg/lock-frontend)
    [처리방법 ]
        killall apt apt-get
@@ -44,12 +44,12 @@
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 3) 패키지 업데이트 
-   apt update
+    apt update
 
 4) Docker Engine 설치 
-  curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
-  dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
-  apt install -y docker-ce docker-ce-cli containerd.io 
+   curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+   dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+   apt install -y docker-ce docker-ce-cli containerd.io 
 
 5)  도커 데몬 설정
     mkdir /etc/docker                                               #/etc/docker 디렉토리 없을 경우 생성
@@ -74,33 +74,23 @@
 
    [참조사이트] https://kubernetes.io/docs/home
 
-1) Swap 비활성화
-   swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
-
-2) 방화벽 비활성화 
-   apt-get install -y firewalld
-   systemctl stop firewalld
-   systemctl disable firewalld
-   
-2)  Master와 Workernode 브릿지(스위치) 연결
-   cat <<EOF | tee /etc/modules-load.d/k8s.conf
-     br_netfilter
-   EOF
-
-   cat<<EOF | tee /etc/sysctl.d/k8s.conf
-     net.bridge.bridge-nf-call-ip6tables = 1
-     net.bridge.bridge-nf-call-iptables = 1
-   EOF
-   sysctl --system
+  1) Swap 비활성화
+     swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
+ 
+  2)  Master와 Workernode 브릿지(스위치) 연결
+    cat<<EOF | tee /etc/sysctl.d/k8s.conf
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.bridge.bridge-nf-call-iptables = 1
+    EOF
+    sysctl --system
 
 4.[All nodes] Kubeadm, kubect, kubelet Install
 
 1) K8S GPG key와 저장소 지정 
-  apt-get install -y apt-transport-https ca-certificates
+  apt-get install -y apt-transport-https ca-certificates curl
   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 
-  apt-add-repository "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] http://apt.kubernetes.io/ kubernetes-xenial main"
 
 2) K8S 저장소의 패키지 업데이트와 K8S 설치  
   apt-get update
@@ -121,7 +111,12 @@
 
 5. [Master]  Kubeadmn을 이용한 cluster 구성
 
- 1)  마스터 노드 초기화
+ 1) 방화벽 비활성화 
+   apt-get install -y firewalld
+   systemctl stop firewalld
+   systemctl disable firewalld
+
+ 2)  마스터 노드 초기화
 
   mv /etc/containerd/config.toml /etc/containerd/config.toml.back
   cat <<EOF > /etc/containerd/config.toml
@@ -138,14 +133,14 @@
          kubeadmin join~~  
      
    ----------------------------------------
- mkdir -p $HOME/.kube
- cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
- chown $(id -u):$(id -g) $HOME/.kube/config
- kubectl get nodes
+  mkdir -p $HOME/.kube
+  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  chown $(id -u):$(id -g) $HOME/.kube/config
+  kubectl get nodes
 
-2) CNI 구성
- kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml   
- kubectl get nodes
+3) CNI 구성
+   kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml   
+   kubectl get nodes
   
 6. [Worker Node] Master node와 Worker node join (Cluster 구성) 
   mv /etc/containerd/config.toml /etc/containerd/config.toml.back
@@ -156,14 +151,15 @@
     EOF
   systemctl restart containerd
     ----------------------------------------
-* kubeadmin join 복사
+      * kubeadmin join 복사
+    ------------------------------------------
   
 7. [Master]클러스터 노드 확인  
   kubectl get nodes
 
 
 ****오류 발생 시 *****
- [오류메시지]  
+ [오류메시지] 
     Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
  [처리방법]
     kubeadm token list
