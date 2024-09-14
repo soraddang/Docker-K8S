@@ -6,7 +6,7 @@ https://docs.docker.com/engine/install/ubuntu/
   1) apt 업데이트 및 필수 패키지 설치
 
     apt-get update
-    apt-get install -y ca-certificates cur
+    apt-get install -y ca-certificates curl
 
 2) 공개키 다운로드 및 저장소 등록 
 
