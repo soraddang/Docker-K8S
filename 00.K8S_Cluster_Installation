@@ -152,3 +152,15 @@ kubectl get nodes
   
 7. [Master]클러스터 노드 확인  
   kubectl get nodes
+
+
+****오류 발생 시 (1) *****
+Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
+  kubeadm token list
+  kubeadm token delete token값
+  kubeadm token list
+  kubeadm token create --print-join-command
+  
+
+
+
