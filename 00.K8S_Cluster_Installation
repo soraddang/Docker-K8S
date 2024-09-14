@@ -23,8 +23,8 @@
    [참조사이트] https://docs.docker.com
 
  1) Docker에 필요한 툴 설치
-  apt-get update
-  apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
+
+   apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
 
     * 오류메세지 출력시 ==> dpkg frontend lock (/var/lib/dpkg/lock-frontend)
        killall apt apt-get
@@ -83,7 +83,6 @@
 4.[All nodes] Kubeadm, kubect, kubelet Install
 
 1) K8S GPG key와 저장소 지정 
-apt-get update
 apt-get install -y apt-transport-https ca-certificates curl
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
