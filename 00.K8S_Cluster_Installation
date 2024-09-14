@@ -103,8 +103,12 @@ systemctl enable kubelet
 
  1)  마스터 노드 초기화
  
-  nano /etc/containerd/config.toml
-        disabled_plugins 항목에서 CRI 제거한 뒤
+  mv /etc/containerd/config.toml /etc/containerd/config.toml.back
+  cat <<EOF > /etc/containerd/config.toml
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+    SystemdCgroup = true
+    EOF
   systemctl restart containerd
   kubeadm init
   -----------------------------------------------   
