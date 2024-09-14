@@ -38,22 +38,20 @@
        apt-get update
     *************************
  
- 2) 도커 GPG key와 저장소 지정   
+ 2) 도커 GPG key와 저장소 지정 후 패키지 업데이트    
    mkdir -p /etc/apt/keyrings
    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+   apt update              #패키지 업데이트 
 
-3) 패키지 업데이트 
-    apt update
+  3) Docker Engine 설치 
+    curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+    dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+    apt install -y docker-ce docker-ce-cli containerd.io 
 
-4) Docker Engine 설치 
-   curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
-   dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
-   apt install -y docker-ce docker-ce-cli containerd.io 
-
-5)  도커 데몬 설정
+  4)  도커 데몬 설정
     mkdir /etc/docker                                               #/etc/docker 디렉토리 없을 경우 생성
-    cat <<EOF |  tee /etc/docker/daemon.json                         #daemon.json 파일 추가
+    cat <<EOF |  tee /etc/docker/daemon.json                         #daemon.json 파일 추가  ==> cgroupdriver=systemd 지정 
      {
         "exec-opts": ["native.cgroupdriver=systemd"],
         "log-driver": "json-file",
@@ -64,10 +62,10 @@
       }
     EOF
 
-6) Docker 활성화 
-   systemctl enable docker
-   systemctl start docker
-   docker --version
+  5) Docker 활성화 
+    systemctl enable docker
+    systemctl start docker
+    docker --version
 
 
 3. K8S 설치 전 준비사항(All Node)
@@ -124,23 +122,25 @@
     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
     SystemdCgroup = true
   EOF
- -----------------------------------------------------------------------------
   systemctl restart containerd
-  kubeadm init
+  kubeadm init                             #K8S 클러스터를 초기화하여 새로운 마스터 노드 생성
   -----------------------------------------------   
-     **kubeadmin join~~을 파일로 저장 
-     nano /kube.txt
-         kubeadmin join~~  
-     
-   ----------------------------------------
-  mkdir -p $HOME/.kube
+       nano /kube.txt                      #kubeadmin join~~을 파일로 저장 
+         kubeadmin join~~       
+  -----------------------------------------
+  mkdir -p $HOME/.kube                      #kubectl 설정 ==> root 계정이 아닌 다른 계정에서도 kubectl 명령어를 사용하기 위해 config 설정
   cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   chown $(id -u):$(id -g) $HOME/.kube/config
   kubectl get nodes
 
-3) CNI 구성
-   kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml   
-   kubectl get nodes
+         ****오류 발생 시 **************
+          [오류메시지]  The connection to the server localhost:8080 was refused - did you specify the right host or port?
+          [처리 방법]   kubectl 설정
+         *********************************
+
+  3)  CNI(Container Network Interface) 설정
+     kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml   
+     kubectl get nodes
   
 6. [Worker Node] Master node와 Worker node join (Cluster 구성) 
   mv /etc/containerd/config.toml /etc/containerd/config.toml.back
@@ -158,11 +158,10 @@
   kubectl get nodes
 
 
-****오류 발생 시 *****
- [오류메시지] 
-    Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
- [처리방법]
-    kubeadm token list
-    kubeadm token delete token값
-    kubeadm token list
-    kubeadm token create --print-join-command
+****오류 발생 시 ***********************************
+ [오류메시지] Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
+ [처리 방법] kubeadm token list
+            kubeadm token delete token값
+            kubeadm token list
+            kubeadm token create --print-join-command
+******************************************************
