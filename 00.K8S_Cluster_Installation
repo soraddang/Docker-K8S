@@ -26,26 +26,30 @@
 
    apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
 
-    * 오류메세지 출력시 ==> dpkg frontend lock (/var/lib/dpkg/lock-frontend)
+   ****오류 발생 시 *****    
+   [오류메시지]  
+       dpkg frontend lock (/var/lib/dpkg/lock-frontend)
+   [처리방법 ]
        killall apt apt-get
        rm /var/lib/apt/lists/lock
        rm /var/cache/apt/archives/lock
        rm /var/lib/dpkg/lock*
        dpkg --configure  -a
        apt-get update
-
+    *************************
+ 
  2) 도커 GPG key와 저장소 지정   
-  mkdir -p /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+   mkdir -p /etc/apt/keyrings
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 3) 패키지 업데이트 
-  apt update
+   apt update
 
 4) Docker Engine 설치 
- curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
- dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
- apt install docker-ce docker-ce-cli containerd.io -y
+  curl -O http://archive.ubuntu.com/ubuntu/pool/main/libs/libseccomp/libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+  dpkg -i libseccomp2_2.5.1-1ubuntu1~20.04.2_amd64.deb
+  apt install -y docker-ce docker-ce-cli containerd.io 
 
 5)  도커 데몬 설정
     mkdir /etc/docker                                               #/etc/docker 디렉토리 없을 경우 생성
@@ -61,9 +65,9 @@
     EOF
 
 6) Docker 활성화 
-  systemctl enable docker
-  systemctl start docker
-  docker version
+   systemctl enable docker
+   systemctl start docker
+   docker --version
 
 
 3. K8S 설치 전 준비사항(All Node)
@@ -84,43 +88,40 @@
    EOF
 
    cat<<EOF | tee /etc/sysctl.d/k8s.conf
-   net.bridge.bridge-nf-call-ip6tables = 1
-   net.bridge.bridge-nf-call-iptables = 1
+     net.bridge.bridge-nf-call-ip6tables = 1
+     net.bridge.bridge-nf-call-iptables = 1
    EOF
    sysctl --system
 
 4.[All nodes] Kubeadm, kubect, kubelet Install
 
 1) K8S GPG key와 저장소 지정 
-apt-get install -y apt-transport-https ca-certificates curl
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
+  apt-get install -y apt-transport-https ca-certificates
+  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 
 2) K8S 저장소의 패키지 업데이트와 K8S 설치  
-apt-get update
-apt-get install -y kubelet kubeadm kubectl
-apt-mark hold kubelet kubeadm kubectl
+  apt-get update
+  apt-get install -y kubelet kubeadm kubectl
+  apt-mark hold kubelet kubeadm kubectl
 
 
-4) K8S 서비스 활성화>>
-systemctl daemon-reload
-systemctl restart kubelet
-systemctl enable kubelet
+3) K8S 서비스 활성화>>
+  systemctl daemon-reload
+  systemctl restart kubelet
+  systemctl enable kubelet
 
 
 5. [Master]  Kubeadmn을 이용한 cluster 구성
 
  1)  마스터 노드 초기화
 
- nano /etc/containerd/config.toml
-        disabled_plugins 항목에서 CRI 제거한 뒤
- --------------------------------------------------------------------------
   mv /etc/containerd/config.toml /etc/containerd/config.toml.back
   cat <<EOF > /etc/containerd/config.toml
     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
     SystemdCgroup = true
-    EOF
+  EOF
  -----------------------------------------------------------------------------
   systemctl restart containerd
   kubeadm init
@@ -130,10 +131,10 @@ systemctl enable kubelet
          kubeadmin join~~  
      
    ----------------------------------------
-mkdir -p $HOME/.kube
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-chown $(id -u):$(id -g) $HOME/.kube/config
-kubectl get nodes
+ mkdir -p $HOME/.kube
+ cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+ chown $(id -u):$(id -g) $HOME/.kube/config
+ kubectl get nodes
 
 2) CNI 구성
  kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s-1.11.yaml   
@@ -154,13 +155,11 @@ kubectl get nodes
   kubectl get nodes
 
 
-****오류 발생 시 (1) *****
-Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
-  kubeadm token list
-  kubeadm token delete token값
-  kubeadm token list
-  kubeadm token create --print-join-command
-  
-
-
-
+****오류 발생 시 *****
+ [오류메시지]  
+    Couldn't validate the identity of the API Server: invalid discovery token CA certificate hash: invalid hash
+ [처리방법]
+    kubeadm token list
+    kubeadm token delete token값
+    kubeadm token list
+    kubeadm token create --print-join-command
