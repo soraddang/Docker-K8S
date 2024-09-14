@@ -72,8 +72,17 @@
 
 1) Swap 비활성화
    swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
+
+2) 방화벽 비활성화 
+   apt-get install -y firewalld
+   systemctl stop firewalld
+   systemctl disable firewalld
    
 2)  Master와 Workernode 브릿지(스위치) 연결
+   cat <<EOF | tee /etc/modules-load.d/k8s.conf
+     br_netfilter
+   EOF
+
    cat<<EOF | tee /etc/sysctl.d/k8s.conf
    net.bridge.bridge-nf-call-ip6tables = 1
    net.bridge.bridge-nf-call-iptables = 1
