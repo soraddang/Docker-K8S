@@ -113,7 +113,8 @@
    apt-get install -y firewalld
    systemctl stop firewalld
    systemctl disable firewalld
-
+   ufw disable 
+   
  2)  마스터 노드 초기화
 
   mv /etc/containerd/config.toml /etc/containerd/config.toml.back
