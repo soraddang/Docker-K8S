@@ -129,6 +129,8 @@
        nano /kube.txt                      #kubeadmin join~~을 파일로 저장 
          kubeadmin join~~       
   -----------------------------------------
+   [확인명령어] kubeadm token create --print-join-command
+
   mkdir -p $HOME/.kube                      #kubectl 설정 ==> root 계정이 아닌 다른 계정에서도 kubectl 명령어를 사용하기 위해 config 설정
   cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   chown $(id -u):$(id -g) $HOME/.kube/config
