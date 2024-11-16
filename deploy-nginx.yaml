@@ -29,7 +29,7 @@ kubectl delete pod deploy-nginx-XXXX-XXX
 
 <<replicaset 삭제>>
 kubectl get rs
-kubectl get rs deploy-nginx-XXXX
+kubectl delete deploy-nginx-XXXX
 
 <<Deployment 삭제>>
 kubectl get deploy
