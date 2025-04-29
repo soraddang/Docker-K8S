@@ -1,0 +1,36 @@
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml 
+
+ <설치 후 장애 발생시 > 
+ error: Metrics API not available
+
+ <Solution>
+ kubectl edit deployments.apps -n kube-system metrics-server
+
+      containers:
+      - args:
+        - --cert-dir=/tmp
+        - --secure-port=10250
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        - --kubelet-use-node-status-port
+        - --metric-resolution=15s
+        
+        - --kubelet-insecure-tls << 추가
+
+
+또는 
+
+kubectl edit deployments.apps -n kube-system metrics-server
+
+spec:
+  nodeName: <your master node name> 
+  containers:
+  - args:
+  - --cert-dir=/tmp
+  - --secure-port=10250
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --kubelet-use-node-status-port
+  - --metric-resolution=15s
+  command:
+  - /metrics-server
+  - --kubelet-insecure-tls
+  - --kubelet-preferred-address-types=InternalIP
