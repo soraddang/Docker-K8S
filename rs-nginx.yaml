@@ -32,7 +32,7 @@ kubectl edit rs rs-nginx
   3 ==> 4  (vi 3)
 kubectl get pods -o wide
 
-<<scale-down>>
+<<scale-in>>
 kubectl scale rs rs-nginx --replicas=2
 kubectl get pods -o wide
 
