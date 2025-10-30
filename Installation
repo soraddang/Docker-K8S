@@ -86,8 +86,8 @@ timedatectl status
   apt-get install -y apt-transport-https ca-certificates curl
   curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg 
   echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
-  apt update
-
+  chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  
 2) K8S 저장소의 패키지 업데이트와 K8S 설치  
   apt-get update
   apt-get install -y kubelet kubeadm kubectl
