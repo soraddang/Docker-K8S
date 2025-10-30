@@ -14,50 +14,20 @@
      nano /etc/pam.d/gdm-autologin
       #auth required pam_succeed_if.so user !=root quiet_success
    
-   3) Ubuntu 저장소 설정
-      cd /etc/apt
-      mv sources.list sources.list.bak
-      nano sources.list
-         deb http://ftp.daumkakao.com/ubuntu/ focal main
-         deb http://archive.ubuntu.com/ubuntu/ focal main
-
-         deb http://ftp.daumkakao.com/ubuntu/ focal universe
-         deb http://archive.ubuntu.com/ubuntu/ focal universe
-
-         deb http://ftp.daumkakao.com/ubuntu/ focal multiverse
-         deb http://archive.ubuntu.com/ubuntu/ focal multiverse
-
-         deb http://ftp.daumkakao.com/ubuntu/ focal restricted
-         deb http://archive.ubuntu.com/ubuntu/ focal restricted
-      
-      또는 sources.list 다운로드 
-      
-          wget http://dw.hanbit.co.kr/ubuntu/20.04/sources.list
-      
-   4) Package Update
+       
+   3) Package Update
       apt update
       
-   5) 네트워크 툴 설치 
+   4) 네트워크 툴 설치 
       apt install net-tools
       
-   6) [Master] SSH 설치
-      apt install openssh-server
+   5) SSH 설치
+      apt install -y openssh-server
       systemctl status ssh
       systemctl enable ssh
       systemctl start ssh
       
-      *ssh client
-       apt-get install openssh-client(기본적으로 설치되어 있음)
-       
-      * ssh username@ip_address
-      
-   7) 방화벽 설치
-      apt install firewalld
-      systemctl stop firewalld
-      systemctl disable firewall
-      
-
-
+  
 2. [All Node] Docker Engine 설치 
 
    [참조사이트] https://docs.docker.com
