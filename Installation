@@ -35,6 +35,12 @@
  1) Docker에 필요한 툴 설치
   apt-get update
   apt-get install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
+
+
+*업데이트 시 오류 발생(시간 동기화)
+timedatectl set-ntp true
+systemctl restart systemd-timesyncd
+timedatectl status
   
  2) 도커 GPG key와 저장소 지정   
   mkdir -p /etc/apt/keyrings
