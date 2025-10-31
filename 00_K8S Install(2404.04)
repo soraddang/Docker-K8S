@@ -123,6 +123,9 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
 kubectl create -f custom-resources.yaml
 
+curl https://docs.projectcalico.org/manifests/calico.yaml -O --insecure
+kubectl apply -f calico.yaml​
+
 <<확인명령어>
 kubectl get nodes 확인
 kubectl get pods -n kube-system
