@@ -118,11 +118,8 @@ kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 kubectl get nodes 
 
 4.2 CNI "Calico(캘리코)" 설치
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
-kubectl create -f custom-resources.yaml
-
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/tigera-operator.yaml
-wget https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/custom-resources.yaml
+#wget https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/custom-resources.yaml
 kubectl apply -f custom-resources.yaml
 
 <<확인명령어>
