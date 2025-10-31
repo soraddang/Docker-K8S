@@ -121,6 +121,7 @@ kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/
 
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
+kubectl create -f custom-resources.yaml
 
 <<확인명령어>
 kubectl get nodes 확인
