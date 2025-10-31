@@ -119,6 +119,9 @@ kubectl get nodes
 4.2 CNI "Calico(캘리코)" 설치
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
+
 <<확인명령어>
 kubectl get nodes 확인
 kubectl get pods -n kube-system
