@@ -99,6 +99,10 @@ systemctl enable kubelet
 4.1  마스터 노드 초기화
 kubeadm init --pod-network-cidr=192.168.0.0/16
 
+* 오류 발생 시  명령어 추가 
+containerd config default > /etc/ocntainerd/config.toml
+systemctl restat containerd
+
 *다시 초기화 할 경우 : kubeadm reset -f
 ------------------------------------------------------------------------------------------
 mkdir -p $HOME/.kube
@@ -116,6 +120,10 @@ kubectl get nodes
 4.2 CNI "Calico(캘리코)" 설치
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 kubectl create -f custom-resources.yaml
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/tigera-operator.yaml
+wget https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/custom-resources.yaml
+kubectl apply -f custom-resources.yaml
 
 <<확인명령어>
 kubectl get nodes 확인
