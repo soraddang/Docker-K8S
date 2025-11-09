@@ -178,11 +178,6 @@ rm -f /etc/kubernetes/pki/ca.crt
 <Node 상태 확인>
 kubectl describe node master
 
-<containerd 서비스 점검>
-systemctl status containerd
-journalctl -xeu containerd
-systemctl restart containerd
-
 <Kubelet 서비스 점검>
 systemctl status kubelet
 journalctl -xeu kubelet
@@ -193,6 +188,50 @@ systemctl restart kubelet
 kubectl get pods -n kube-system
 *calico CNI Pod가 Running 확인
 
-<토큰 재발급>
-kubeadm token list
-master  ==> kubeadm token create --print-join-command
+*오류 메세지  : server 192.168.10.10:6443 was refused 
+The connection to the server 192.168.10.10:6443 was refused - did you specify the right host or port? 
+  //Kubernetes API 서버(마스터 노드) 에 접속하지 못하고 있음을 의미
+   systemctl status kubelet
+   netstat -tulnp | grep 6443   
+   //LISTEN 중인지 확인, 만약 없다면 kube-apiserver가 실행되지 않음
+
+   <<kube-apiserver가 실행 중인지 확인>>
+   docker ps | grep kube-apiserver
+   crictl ps | grep kube-apiserver    //아무 출력이 없으면 API 서버 Pod이 죽은 상태
+  * 오류 메세지 kubelet.service: Failed with result 'exit-code
+   systemctl status kubelet -l
+
+해결방안 1> swap 비활성화 
+swapon --show
+swapoff -a
+------------------------------------------
+Swap 영구 비활성화
+nano /etc/fstab
+   /swapfile 혹은 UUID= ==> 주석처리 
+----------------------------------------------
+
+systemctl daemon-reload
+systemctl restart kubelet
+systemctl status kubelet -l
+
+해결방안 2) containerd 서비스 점검
+systemctl status containerd
+journalctl -xeu containerd
+systemctl restart containerd
+
+해결방안 3> cgroup 설정 불일치 
+nano /etc/containerd/config.toml
+ [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  SystemdCgroup = true   //추가 설정 
+systemctl restart containerd
+
+cat /var/lib/kubelet/config.yaml | grep -i cgroupDriver
+cgroupDriver: systemd    //설정 값 확인 
+ systemctl restart kubelet
+
+
+
+
+
+
+
