@@ -1,0 +1,57 @@
+wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml -O metrics-server.yaml
+
+nano metrics-server.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-server
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: metrics-server
+  template:
+    metadata:
+      labels:
+        k8s-app: metrics-server
+    spec:
+      containers:
+      - name: metrics-server
+        image: registry.k8s.io/metrics-server/metrics-server:v0.7.2
+        imagePullPolicy: IfNotPresent
+        args:
+          - --cert-dir=/tmp 
+          - --secure-port=4443                                                 //수정
+          - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS  //추가
+          - --kubelet-use-node-status-port
+          - --metric-resolution=15s
+          - --kubelet-insecure-tl    //추가
+
+         ports:
+         - containerPort: 4443        //추가 
+
+
+------------------------------------------------
+kubectl apply -f metrics-server.yaml
+
+<<설치확인>>
+kubectl get deployment metrics-server -n kube-system
+root@master:~# kubectl top nodes
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+master     180m         4%     2545Mi          67%       
+worker01   39m          1%     1608Mi          42%       
+worker02   32m          1%     1590Mi          42%       
+worker03   33m          1%     1459Mi          38%       
+
+root@master:~# kubectl get deploy -A
+NAMESPACE          NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+calico-apiserver   calico-apiserver          2/2     2            2           11h
+calico-system      calico-kube-controllers   1/1     1            1           11h
+calico-system      calico-typha              2/2     2            2           11h
+kube-system        coredns                   2/2     2            2           11h
+kube-system        metrics-server            1/1     1            1           19m
+tigera-operator    tigera-operator           1/1     1            1           11h
+
+root@master:~# kubectl get deployment metrics-server -n kube-system
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+metrics-server   1/1     1            1           18m
