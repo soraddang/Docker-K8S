@@ -97,26 +97,33 @@ systemctl enable kubelet
 4. [Master]  Kubeadmn을 이용한 cluster 구성
 
 4.1  마스터 노드 초기화
+kubeadm init --pod-network-cidr=192.168.0.0/16
+
+<오류 발생시 다시 초기화 할 경우>
+kubeadm reset -f
 containerd config default > /etc/containerd/config.toml
 systemctl restart containerd
+swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
+systemctl restart kubelet
 kubeadm init --pod-network-cidr=192.168.0.0/16
 
 
-*다시 초기화 할 경우 : kubeadm reset -f
-------------------------------------------------------------------------------------------
+4.2 Kubernetes 관리자 계정(kubectl)이 클러스터에 접근할 수 있도록 인증 설정을 연결하는 과정
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
 
-//설정시스템 마다 다름 
+<<확인명령어>>
+kubectl get nodes 
+
+----------------------------------------------------------------------------
+//생성된 토큰 저장
 kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 	--discovery-token-ca-cert-hash sha256:713abf30b0502dd416ee44cc8e8a674d8e37b2b4114c515f392595d1cf6de58d
 ----------------------------------------------------------------------
 
-<<확인명령어>>
-kubectl get nodes 
-
-4.2 CNI "Calico(캘리코)" 설치
+4.3 CNI "Calico(캘리코)" 설치
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
