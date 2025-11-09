@@ -115,7 +115,6 @@ rm -rf /var/lib/etcd
 rm -rf $HOME/.kube
 rm -f /etc/kubernetes/pki/ca.crt
 
-
 4.2 Kubernetes 관리자 계정(kubectl)이 클러스터에 접근할 수 있도록 인증 설정을 연결하는 과정
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -130,14 +129,17 @@ kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 	--discovery-token-ca-cert-hash sha256:713abf30b0502dd416ee44cc8e8a674d8e37b2b4114c515f392595d1cf6de58d
 ----------------------------------------------------------------------
 
+<토큰 재발급>
+kubeadm token list
+master  ==> kubeadm token create --print-join-command
+
+
 4.3 CNI "Calico(캘리코)" 설치
+** CNI(Container Network Interface) : Pod 간 통신이 가능하게 하는 인터페이스(표준 사양) 
+
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
 kubectl create -f custom-resources.yaml
-
-
-curl https://docs.projectcalico.org/manifests/calico.yaml -O --insecure
-kubectl apply -f calico.yaml​
 
 <<확인명령어 1>>
 kubectl get pods -n kube-system
@@ -159,14 +161,17 @@ NAME     STATUS   ROLES           AGE   VERSION
 master   Ready    control-plane   27m   v1.31.13
 ------------------------------------------------------
 
-
-* CNI(Container Network Interface) : Pod 간 통신이 가능하게 하는 인터페이스(표준 사양) 
-
-
 5. <Worker Node> Master node와 Worker node join (Cluster 구성) 
 
 kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 	--discovery-token-ca-cert-hash sha256:713abf30b0502dd416ee44cc8e8a674d8e37b2b4114c515f392595d1cf6de58d
+
+<<이전 설정값으로 초기화 시 >>
+kubeadm reset -f
+rm -rf /etc/Kubernetes
+rm -rf /var/lib/etcd
+rm -rf $HOME/.kube
+rm -f /etc/kubernetes/pki/ca.crt
 
 
 6. 오류 발생 시 점검 명령어
