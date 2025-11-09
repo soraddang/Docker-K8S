@@ -65,7 +65,16 @@ sysctl --system
   systemctl start docker
   docker version
 
+
+2.5  containerd 런타임의 기본 설정 파일 생성
+mkdir /etc/containerd
+sh -c "containerd config default > /etc/containerd/config.toml"
+sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.toml
+systemctl restart containerd.service
+systemctl status containerd.service
+
 ----------------------------------------
+
 3.(All nodes)  Kubeadm, kubectl, kubelet 설치
 
 3.1 K8S GPG key와 저장소 지정 
@@ -99,14 +108,12 @@ systemctl enable kubelet
 4.1  마스터 노드 초기화
 kubeadm init --pod-network-cidr=192.168.0.0/16
 
-<오류 발생시 다시 초기화 할 경우>
+<<이전 설정값으로 초기화 시 >>
 kubeadm reset -f
-containerd config default > /etc/containerd/config.toml
-systemctl restart containerd
-swapoff -a
-sed -i '/ swap / s/^/#/' /etc/fstab
-systemctl restart kubelet
-kubeadm init --pod-network-cidr=192.168.0.0/16
+rm -rf /etc/Kubernetes
+rm -rf /var/lib/etcd
+rm -rf $HOME/.kube
+rm -f /etc/kubernetes/pki/ca.crt
 
 
 4.2 Kubernetes 관리자 계정(kubectl)이 클러스터에 접근할 수 있도록 인증 설정을 연결하는 과정
@@ -118,22 +125,21 @@ chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl get nodes 
 
 ----------------------------------------------------------------------------
-//생성된 토큰 저장
+4.3 생성된 토큰 값 확인 
 kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 	--discovery-token-ca-cert-hash sha256:713abf30b0502dd416ee44cc8e8a674d8e37b2b4114c515f392595d1cf6de58d
 ----------------------------------------------------------------------
 
 4.3 CNI "Calico(캘리코)" 설치
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
 kubectl create -f custom-resources.yaml
 
+
 curl https://docs.projectcalico.org/manifests/calico.yaml -O --insecure
 kubectl apply -f calico.yaml​
 
-<<확인명령어>
-kubectl get nodes 확인
+<<확인명령어 1>>
 kubectl get pods -n kube-system
 ----------------------------------------------------------------------------------
 root@master:~# kubectl get pods -n kube-system
@@ -146,8 +152,8 @@ kube-apiserver-master            1/1     Running   18 (6m53s ago)   28m
 kube-controller-manager-master   1/1     Running   17 (7m34s ago)   28m
 kube-proxy-jkvlf                 1/1     Running   11 (4m23s ago)   27m
 kube-scheduler-master            1/1     Running   19 (6m37s ago)   28m
-
 --------------------------------------------------------------------------------
+<<확인명령어 2>>
 root@master:~# kubectl get nodes
 NAME     STATUS   ROLES           AGE   VERSION
 master   Ready    control-plane   27m   v1.31.13
