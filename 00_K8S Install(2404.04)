@@ -125,7 +125,6 @@ kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 
 4.3 CNI "Calico(캘리코)" 설치
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
-
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
 curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
 kubectl create -f custom-resources.yaml
@@ -136,8 +135,23 @@ kubectl apply -f calico.yaml​
 <<확인명령어>
 kubectl get nodes 확인
 kubectl get pods -n kube-system
-   calico-node-74dc6     Running   확인 
+----------------------------------------------------------------------------------
+root@master:~# kubectl get pods -n kube-system
+NAME                             READY   STATUS    RESTARTS         AGE
+calico-node-dbjbw                0/1     Running   0                40s
+coredns-7c65d6cfc9-wc8ts         1/1     Running   0                27m
+coredns-7c65d6cfc9-x68p2         1/1     Running   0                27m
+etcd-master                      1/1     Running   14 (5m34s ago)   28m
+kube-apiserver-master            1/1     Running   18 (6m53s ago)   28m
+kube-controller-manager-master   1/1     Running   17 (7m34s ago)   28m
+kube-proxy-jkvlf                 1/1     Running   11 (4m23s ago)   27m
+kube-scheduler-master            1/1     Running   19 (6m37s ago)   28m
 
+--------------------------------------------------------------------------------
+root@master:~# kubectl get nodes
+NAME     STATUS   ROLES           AGE   VERSION
+master   Ready    control-plane   27m   v1.31.13
+------------------------------------------------------
 
 
 * CNI(Container Network Interface) : Pod 간 통신이 가능하게 하는 인터페이스(표준 사양) 
