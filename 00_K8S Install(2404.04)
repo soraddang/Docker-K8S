@@ -73,6 +73,10 @@ sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.
 systemctl restart containerd.service
 systemctl status containerd.service
 
+*containerd
+   - 컨테이너 런타임(Runtime)
+   - 컨테이너를 실제로 생성, 실행, 중지, 삭제 
+   
 ----------------------------------------
 
 3.(All nodes)  Kubeadm, kubectl, kubelet 설치
