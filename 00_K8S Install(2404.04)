@@ -25,6 +25,13 @@ swapon --show
 modprobe overlay          
 modprobe br_netfilter
 
+------------------------------------------
+Swap 영구 비활성화
+nano /etc/fstab
+   /swapfile 혹은 UUID= ==> 주석처리 
+----------------------------------------------
+
+
 1.3 리눅스 커널 모듈(overlay 모듈)을 로드하는 명령 
 tee /etc/modules-load.d/k8s.conf <<EOF
 overlay
