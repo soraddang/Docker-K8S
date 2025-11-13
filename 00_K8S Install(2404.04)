@@ -166,11 +166,24 @@ kube-controller-manager-master   1/1     Running   17 (7m34s ago)   28m
 kube-proxy-jkvlf                 1/1     Running   11 (4m23s ago)   27m
 kube-scheduler-master            1/1     Running   19 (6m37s ago)   28m
 --------------------------------------------------------------------------------
+또는 
 <<확인명령어 2>>
+root@master:~# kubectl get ns
+NAME               STATUS   AGE
+calico-apiserver   Active   4d7h
+calico-system      Active   4d7h
+default            Active   4d7h
+kube-node-lease    Active   4d7h
+kube-public        Active   4d7h
+kube-system        Active   4d7h
+tigera-operator    Active   4d7h
+----------------------------------------------------------------------------------
+
+<<확인명령어 3>>
 root@master:~# kubectl get nodes
 NAME     STATUS   ROLES           AGE   VERSION
 master   Ready    control-plane   27m   v1.31.13
-------------------------------------------------------
+
 
 5. <Worker Node> Master node와 Worker node join (Cluster 구성) 
 
