@@ -10,6 +10,6 @@ spec:
     - containerPort: 80
       protocol: TCP
     env:
-    - name: MYVAR
-      value: "testvalue"
+    - name: TEST
+      value: "testone"
 
