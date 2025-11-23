@@ -72,15 +72,3 @@ spec:
       limits:
         memory: 1Gi
         cpu: 1
-
-
-kubectl describe resource2.yaml
-
-<<container 별로 resource 설정>>
-
-1MB ==1000KB
-1MiB==1024KiB  (메모리 표기방법)
-
-1core == 1000m core
-     * 200m core란 1000/5=200m
-
