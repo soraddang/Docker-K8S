@@ -1,0 +1,86 @@
+<<resource1.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources1
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 1
+  
+<<resource2.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources2
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 1
+--------------------------
+<<resources3.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources3
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 8
+------------------------
+
+<<resources4.yaml>>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resources4
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    env:
+    - name: MYVAR
+      value: "testvalue"
+    resources:
+      requests:
+        memory: 500Mi
+        cpu: 200m
+      limits:
+        memory: 1Gi
+        cpu: 1
+
+
+kubectl describe resource2.yaml
+
+<<container 별로 resource 설정>>
+
+1MB ==1000KB
+1MiB==1024KiB  (메모리 표기방법)
+
+1core == 1000m core
+     * 200m core란 1000/5=200m
+
