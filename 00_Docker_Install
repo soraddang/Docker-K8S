@@ -1,0 +1,37 @@
+https://docs.docker.com/engine/install/ubuntu/
+
+<Uninstall old versions>
+apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
+
+
+<Installation methods>
+
+Step 1. Install using the apt repository(Docker 저정소 등록)
+
+# Add Docker's official GPG key(도커 공식 GPG 키 추가) 
+apt update
+apt install -y ca-certificates curl
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources(Docker 공식 저장소 등록) 
+tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+apt update
+
+
+Step 2. Install the Docker packages(도커 패키지 설치)
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl status docker
+systemctl start docker
+systemctl enable docker
+
+Step 3. 설치확인
+docker --version 
+docker run hello-world
