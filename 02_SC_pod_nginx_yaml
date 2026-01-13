@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.14
+    ports:
+    - containerPort: 80
+      protocol: TCP
+
+----------------------------------
+watch  kubectl get pods –o wide
+kubectl create -f pod-nginx.yaml 
+kubect get pods –o wide
+kubectl describe pod nginx-pod
+kubectl delete pod nginx-pod
+
