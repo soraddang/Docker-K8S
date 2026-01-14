@@ -34,7 +34,7 @@ kubectl edit rc rc-nginx
   3 ==> 4  (vi 3)
 kubectl get pods -o wide
 
-<<scale-down>>
+<<scale-in>>
 kubectl scale rc rc-nginx --replicas=2
 kubectl get pods -o wide
 
