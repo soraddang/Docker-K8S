@@ -34,3 +34,26 @@ kubectl get rs deploy-nginx-XXXX
 <<Deployment 삭제>>
 kubectl get deploy
 kubectl delete deployment deploy-nginx
+
+-----------------------------------------
+<<app-nginx.yaml>>
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webui
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: webui
+    spec:
+      containers:
+      - name: web
+        image: nginx:1.14
+
