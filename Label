@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pod-demo
+  labels:
+    name: testpod    
 spec:
   containers:
   - name: nginx
