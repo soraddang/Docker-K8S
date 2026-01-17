@@ -25,7 +25,7 @@ spec:
           - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS  //추가
           - --kubelet-use-node-status-port
           - --metric-resolution=15s
-          - --kubelet-insecure-tl    //추가
+          - --kubelet-insecure-tls    //추가
 
          ports:
          - containerPort: 4443        //추가 
