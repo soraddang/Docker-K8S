@@ -27,6 +27,8 @@ spec:
           - --metric-resolution=15s
           - --kubelet-insecure-tls    //추가
 
+           // metrics-server가 내부 IP 기반으로 kubelet에 접근하고, 인증서 검증이 완료되면 15초 주기로 메트릭을 수집
+
          ports:
          - containerPort: 4443        //추가 
 
