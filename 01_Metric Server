@@ -56,7 +56,7 @@ root@master:~# kubectl get deployment metrics-server -n kube-system
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
 metrics-server   1/1     1            1           3d20h
 
-<<설치확인 3>>
+<<설치확인 3>> 노드의 현재 자원 사용량(CPU·메모리)을 실시간으로 조회
 root@master:~# kubectl top nodes
 NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
 master     180m         4%     2545Mi          67%       
