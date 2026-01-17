@@ -22,4 +22,4 @@ spec:
             cpu: 200m
 
 
-==> 최소 200m(또는 1core의 20% 또는 0.2코어)를 보장 받을 수 있는 Worker node에 해당 pod를 생성
+==> 최소 200m(또는 1core의 20% 또는 0.2) 코어사용률을 를 보장 받을 수 있는 Worker node에 해당 pod를 생성
