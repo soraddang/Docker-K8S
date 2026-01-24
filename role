@@ -1,0 +1,39 @@
+kubectl create role developer --verb=create --verb=get --verb=list --verb=update --verb=delete --resource=pods
+kubectl get role
+kubectl create role developer --verb=create --verb=get --verb=list --verb=update --verb=delete --resource=pods --dry-run -o yaml
+kubectl create rolebinding developer-binding-myuser --role=developer --user=myuser --dry-run -o yaml  ==> yaml 파일 생성
+kubectl create rolebinding developer-binding-myuser --role=developer --user=myuser
+
+kubectl config set-credentials myuser --client-key=myuser.key --client-certificate=myuser.crt --embed-certs=true
+kubectl config view
+
+kubectl config set-context myuser --cluster=kubernetes --user=myuser
+
+kubectl config use-context myuser
+kubectl config current-context
+
+------------------------------------------
+<<cluster role>
+
+kubectl config use-context kubernetes-admin@kubernetes
+kubectl config current-context
+kubectl create clusterrole developer --verb=create --verb=get --verb=list --verb=update --verb=delete --resource=pods 
+kubectl create clusterrolebinding developer-binding-myuser --clusterrole=developer --user=myuser
+
+kubectl config use-context myuser
+kubectl config current-context
+
+kubectl config use-context kubernetes-admin@kubernetes
+kubectl config current-context
+
+kubectl delete clusterrolebindings.rbac.authorization.k8s.io developer-binding-myuser
+kubectl delete clusterrole developer
+kubectl config delete-context myuser
+kubectl config delete-user myuser
+*kubectl delete csr myuser
+kubectl delete serviceaccounts pod-viewer
+
+
+kubectl get clusterrole
+kubectl describe clusterrole view
+kubectl describe clusterrole cluster-admin
