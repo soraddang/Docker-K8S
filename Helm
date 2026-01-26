@@ -1,0 +1,16 @@
+//Install ==> https://helm.sh/ko/docs/intro/install
+curl -tjfcl fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+helm version 
+
+//Repo Adding ==> https://charts.bitnami.com/
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo list
+helm search repo bitnami
+helm search repo nginx
+
+//Helm Command
+helm show chart bitnami/nginx
+helm inspect values bitnami/nginx
+
