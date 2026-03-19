@@ -25,7 +25,6 @@ Signed-By: /etc/apt/keyrings/docker.asc
 EOF
 apt update
 
-
 Step 2. Install the Docker packages(도커 패키지 설치)
 apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 systemctl status docker
