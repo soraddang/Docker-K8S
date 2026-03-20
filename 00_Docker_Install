@@ -1,10 +1,19 @@
+1. VMWare Installation 
+   Download Site  ==> https://drive.google.com/file/d/1LE6OlzSkEF8WzPzSOllDST93Eh-wlRmj/view?usp=sharing
+
+2. Ubuntu 24.04 Installation
+   Download Site
+    ==> https://ubuntu.com/download/desktop
+   
+   * Xshell Download 
+    ==> https://www.netsarang.com/ko/free-for-home-school/
+
+3. Docker Installation methods
 https://docs.docker.com/engine/install/ubuntu/
 
 <Uninstall old versions>
 apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | cut -f1)
 
-
-<Installation methods>
 
 Step 1. Install using the apt repository(Docker 저정소 등록)
 
