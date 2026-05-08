@@ -1,0 +1,16 @@
+docker run –name mysqlserver –dit –net=wpnet 
+      -e MYSQL_ROOT_PASSWORD=1234567 
+      -e MYSQL_DATABASE=wordpressdb 
+      -e MYSQL_USER=gildong
+      -e MYSQL_PASSWORD=1234 
+      mysql 
+      --character-set-server=utf8mb4                       // 기본 문자 집합(Character Set)
+      --collation-server=utf8mb4_Unicode_ci         // 텍스트를 정렬, 비교할 때 사용할 규칙
+
+ docker run --name wdpress –dit --net=wpnet  -p 8085:80 
+      –e WORDPRESS_DB_HOST=mysqlserver
+      –e WORDPRESS_DB_NAME=wordpressdb
+      –e WORDPRESS_DB_USER=gildong
+      -e WORDPRESS_DB_PASSWORD=1234  
+      wordpress
+
