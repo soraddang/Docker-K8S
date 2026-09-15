@@ -189,6 +189,7 @@ master   Ready    control-plane   27m   v1.31.13
 
 
 5. <Worker Node> Master node와 Worker node join (Cluster 구성) 
+apt-get update && apt-get install -y conntrack
 
 kubeadm join 192.168.10.10:6443 --token mxh567.vq5b67pvo30kh1sc \
 	--discovery-token-ca-cert-hash sha256:713abf30b0502dd416ee44cc8e8a674d8e37b2b4114c515f392595d1cf6de58d
