@@ -1,5 +1,5 @@
 
-1. 설치 전  환경 설정 
+1.(All nodes)  설치 전  환경 설정 
 
 1) 타임존 설정 
 timedatectl set-timezone Asia/Seoul
@@ -18,7 +18,7 @@ apt-get update
 apt-get install -y apt-transport-https ca-certificates curl gpg iproute2
 
 
-#컨테이너 런타임 설치 전 사전작업 
+2. (All nodes) 컨테이너 런타임 설치 전 사전작업 
 1) 필요한 모듈 로드
 cat <<EOF | tee /etc/modules-load.d/containerd.conf
 overlay
@@ -38,7 +38,7 @@ EOF
 3) 설정값 적용
 sudo sysctl --system
 
-#컨테이너 런타임 설치
+3. (All nodes) 컨테이너 런타임 설치
 1) 도커 공식 GPG 키 추가
 apt-get update
 install -m 0755 -d /etc/apt/keyrings
@@ -62,11 +62,9 @@ containerd config default | tee /etc/containerd/config.toml
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 systemctl restart containerd
 
------------------------------
+4. (All nodes) K8S 설치 
 
-3.(All nodes)  Kubeadm, kubectl, kubelet 설치
-
-3.1 K8S GPG key와 저장소 지정 
+1) K8S GPG key와 저장소 지정 
 apt-get install curl ca-certificates apt-transport-https  -y
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list
@@ -77,7 +75,7 @@ chmod a+r /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   - Docker의 GPG 공개키를 읽을 수 있도록 권한 변경(저장소서명 검증이 정상적으로 동작하도록 설정) : chmod a+r
 
 
-3.2  Kubeadm, kubectl, kubelet 설치
+2) Kubeadm, kubectl, kubelet 설치
 apt update
 apt install kubelet kubeadm kubectl -y
 apt-mark hold kubelet kubeadm kubectl
@@ -86,7 +84,7 @@ apt-mark hold kubelet kubeadm kubectl
 *kubelet	각 노드에서 Pod를 실제로 실행·관리하는 에이전트	
 *kubectl	클러스터를 제어하는 사용자 명령 인터페이스(CLI)
 
-3.3 K8S 서비스 활성화
+3) K8S 서비스 활성화
 systemctl daemon-reload
 systemctl restart kubelet
 systemctl enable kubelet
